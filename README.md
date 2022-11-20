@@ -23,10 +23,10 @@ This repository contains three types of work:<br>
 <summary>2) Follow Along Tutorials and Courses</summary>
 
 - Waiter Tip Calculator App<br>
-  [First App](https://github.com/KlimesJiri/core-java/tree/main/1.ExpressionsAndControlflow/ExpressionsAndControlflow/src/theory)<br>
+  [First App](https://github.com/KlimesJiri/kotlin-android/tree/main/TipAWaiter)<br>
   
 - Age in Minutes Calculator App<br>
-  [Expressions and Controlflow](https://github.com/KlimesJiri/core-java/tree/main/1.ExpressionsAndControlflow/ExpressionsAndControlflow/src)
+  [Expressions and Controlflow](https://github.com/KlimesJiri/kotlin-android/tree/main/DOBCalculator)
 
   
 <summary>3) Personal work</summary>
