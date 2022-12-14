@@ -13,4 +13,9 @@
     <color name="grayDark">#505050</color>
     <color name="grayDarkDisabled">#9F9F9F</color>
     <color name="statusColor">#D8D8D8</color>
+
+    <color name="strokeColor">#1E88E5</color>
+
+    <color name="opaqueBG">#61000000</color>
+
 </resources>
