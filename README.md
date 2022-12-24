@@ -13,8 +13,7 @@ These projects and exercises were chosen from free materials on the internet, as
 
 This repository contains three types of work:<br>
 1) Practicing the Kotlin programming language and learning it's features.<br>
-2) The follow along courses where I learn and practice Android Development on a specific project.<br>
-3) My own work and personal projects.<br>
+2) Standalone projects for practice Android Development.<br>
 
 <summary>1) Kotlin programming</summary>
 
@@ -27,8 +26,3 @@ This repository contains three types of work:<br>
   
 - Age in Minutes Calculator App<br>
   [AgeInMinutesCalculator](https://github.com/KlimesJiri/kotlin-android/tree/main/DOBCalculator)
-
-  
-<summary>3) Personal work</summary>
-
-*Work in progress - right now this is empty :(*
