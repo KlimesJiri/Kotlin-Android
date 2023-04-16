@@ -3,7 +3,7 @@ package com.example.audiorecorder
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.media.MediaRecorder
+import android.media.AudioFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -13,11 +13,11 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.github.squti.androidwaverecorder.WaveRecorder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
 import java.io.File
-import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -28,7 +28,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private var permissions = arrayOf(Manifest.permission.RECORD_AUDIO)
     private var permissionGranted = false
 
-    private lateinit var recorder: MediaRecorder
+    private lateinit var waveRecorder: WaveRecorder
+
     private var dirPath = ""
     private var fileName = ""
     private var isRecording = false
@@ -78,7 +79,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         }
 
         btnCancel.setOnClickListener{
-            File("$dirPath$fileName.mp3").delete()
+            File("$dirPath$fileName.wav").delete()
             dismiss()
         }
 
@@ -88,13 +89,13 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         }
 
         bottomSheetBG.setOnClickListener {
-            File("$dirPath$fileName.mp3").delete()
+            File("$dirPath$fileName.wav").delete()
             dismiss ()
         }
 
         btnDelete.setOnClickListener {
-           stopRecorder()
-            File("$dirPath$fileName.mp3").delete()
+            stopRecorder()
+            File("$dirPath$fileName.wav").delete()
             Toast.makeText(this, "Record deleted", Toast.LENGTH_SHORT).show()
         }
 
@@ -104,8 +105,8 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private fun save(){
         val newFileName = filenameInput.text.toString()
         if(newFileName != fileName){
-            var newFile = File("$dirPath$newFileName.mp3")
-            File("$dirPath$newFileName.mp3").renameTo(newFile)
+            var newFile = File("$dirPath$newFileName.wav")
+            File("$dirPath$fileName.wav").renameTo(newFile)
         }
     }
 
@@ -135,7 +136,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     }
 
     private fun pauseRecorder(){
-        recorder.pause()
+        waveRecorder.pauseRecording()
         isPaused = true
         btnRecord.setImageResource(R.drawable.ic_record)
 
@@ -143,7 +144,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     }
 
     private fun resumeRecorder(){
-        recorder.resume()
+        waveRecorder.resumeRecording()
         isPaused = false
         btnRecord.setImageResource(R.drawable.ic_pause)
 
@@ -157,26 +158,18 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
              return
         }
 
-        recorder = MediaRecorder()
         dirPath = "${externalCacheDir?.absolutePath}/"
 
         var simpleDateFormat = SimpleDateFormat("yyyy.MM.DD_hh.mm.ss")
         var date = simpleDateFormat.format(Date())
         fileName = "audio_record_$date"
 
-        recorder.apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            setOutputFile("$dirPath$fileName.mp3")
+        waveRecorder = WaveRecorder("$dirPath$fileName.wav")
+        waveRecorder.waveConfig.sampleRate = 44100
+        waveRecorder.waveConfig.channels = AudioFormat.CHANNEL_IN_STEREO
+        waveRecorder.waveConfig.audioEncoding = AudioFormat.ENCODING_PCM_16BIT
+        waveRecorder.startRecording()
 
-            try {
-                prepare()
-            } catch (e: IOException){
-
-            }
-            start()
-        }
         btnRecord.setImageResource(R.drawable.ic_pause)
         isRecording = true
         isPaused = false
@@ -193,10 +186,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private fun stopRecorder(){
         timer.stop()
 
-        recorder.apply {
-            stop()
-            release()
-        }
+        waveRecorder.stopRecording()
 
         isPaused = false
         isRecording = false
