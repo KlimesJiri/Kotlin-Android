@@ -13,10 +13,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.room.Room
 import com.github.squti.androidwaverecorder.WaveRecorder
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.bottom_sheet.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,7 +38,11 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
     private var isRecording = false
     private var isPaused = false
 
+    private var duration = ""
+
     private lateinit var timer: Timer
+
+    private lateinit var db : AppDatabase
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
@@ -48,6 +55,11 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         if (!permissionGranted)
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
 
+        db = Room.databaseBuilder(
+            this,
+            AppDatabase::class.java,
+            "audioRecords"
+        ).build()
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
         bottomSheetBehavior.peekHeight = 0
@@ -107,6 +119,15 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         if(newFileName != fileName){
             var newFile = File("$dirPath$newFileName.wav")
             File("$dirPath$fileName.wav").renameTo(newFile)
+        }
+
+        var filePath = "$dirPath$newFileName.wav"
+        var timeStamp = Date().time
+
+        var record = AudioRecord(newFileName, filePath, timeStamp, duration)
+
+        GlobalScope.launch {
+            db.audioRecordDao().insert(record)
         }
     }
 
@@ -204,6 +225,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
     override fun onTimerTick(duration: String) {
         tvTimer.text = duration
+        this.duration = duration.dropLast(3)
     }
 
 }
