@@ -2,6 +2,7 @@ package com.example.audiorecorder
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.media.AudioFormat
 import androidx.appcompat.app.AppCompatActivity
@@ -76,9 +77,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         }
 
         btnList.setOnClickListener {
-            //  TODO
-            Toast.makeText(this, "List button", Toast.LENGTH_SHORT).show()
-
+            startActivity(Intent(this, GalleryActivity::class.java))
         }
 
         btnDone.setOnClickListener {
