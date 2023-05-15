@@ -17,8 +17,13 @@
         android:theme="@style/Theme.AudioRecorder"
         tools:targetApi="31">
         <activity
+            android:name=".DetailActivity"
+            android:exported="false"
+            android:parentActivityName=".GalleryActivity"/>
+        <activity
             android:name=".GalleryActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

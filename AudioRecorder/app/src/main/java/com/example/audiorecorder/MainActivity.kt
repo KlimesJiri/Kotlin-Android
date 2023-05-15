@@ -53,8 +53,10 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
         permissionGranted = ActivityCompat.checkSelfPermission(this, permissions[0]) == PackageManager.PERMISSION_GRANTED
 
-        if (!permissionGranted)
+        if (!permissionGranted){
             ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
+        }
+
 
         db = Room.databaseBuilder(
             this,
@@ -82,7 +84,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
         btnDone.setOnClickListener {
             stopRecorder()
-            //Toast.makeText(this, "Record saved", Toast.LENGTH_SHORT).show()
 
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBG.visibility = View.VISIBLE
@@ -111,6 +112,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         }
 
         btnDelete.isClickable = false
+
     }
 
     private fun save(){
@@ -171,7 +173,6 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
         timer.start()
     }
 
-    @Suppress("DEPRECATION")
     private fun startRecording(){
         if (!permissionGranted){
              ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE)
@@ -186,7 +187,7 @@ class MainActivity : AppCompatActivity(), Timer.OnTimerTickListener {
 
         waveRecorder = WaveRecorder("$dirPath$fileName.wav")
         waveRecorder.waveConfig.sampleRate = 44100
-        waveRecorder.waveConfig.channels = AudioFormat.CHANNEL_IN_STEREO
+        waveRecorder.waveConfig.channels = AudioFormat.CHANNEL_IN_MONO
         waveRecorder.waveConfig.audioEncoding = AudioFormat.ENCODING_PCM_16BIT
         waveRecorder.startRecording()
 
