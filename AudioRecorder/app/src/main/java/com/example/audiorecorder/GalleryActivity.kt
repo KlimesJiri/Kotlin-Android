@@ -20,6 +20,8 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_gallery.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
 
 
 class GalleryActivity : AppCompatActivity(), OnItemClickListener {
@@ -226,8 +228,13 @@ class GalleryActivity : AppCompatActivity(), OnItemClickListener {
         }else{
             var intent = Intent(this, DetailActivity::class.java)
 
+            var sdf = SimpleDateFormat("dd/MM/yyyy")
+            var date = Date(records[position].timeStamp)
+            var strDate = sdf.format(date)
+
             intent.putExtra("filename", audioRecord.filename)
             intent.putExtra("duration", audioRecord.duration)
+            intent.putExtra("timeStamp", strDate)
 
             startActivity(intent)
         }

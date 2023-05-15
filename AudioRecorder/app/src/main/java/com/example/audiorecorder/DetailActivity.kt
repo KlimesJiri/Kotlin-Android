@@ -11,7 +11,8 @@ class DetailActivity : AppCompatActivity() {
 
     private lateinit var toolbar: MaterialToolbar
     private lateinit var tvFilename: TextView
-    //private lateinit var tvDuration: TextView
+    private lateinit var tvDuration: TextView
+    private lateinit var tvTimestamp: TextView
 
     private lateinit var runnable: Runnable
     private lateinit var handler: Handler
@@ -22,11 +23,13 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         val filename = intent.getStringExtra("filename")
-        //val duration = intent.getStringExtra("duration")
+        val duration = intent.getStringExtra("duration")
+        val timeStamp = intent.getStringExtra("timeStamp")
 
         toolbar = findViewById(R.id.toolbar)
         tvFilename = findViewById(R.id.tvFilename)
-        //tvDuration = findViewById(R.id.tvDuration)
+        tvDuration = findViewById(R.id.tvDuration)
+        tvTimestamp = findViewById(R.id.tvTimestamp)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
@@ -35,7 +38,8 @@ class DetailActivity : AppCompatActivity() {
         }
 
         tvFilename.text = "The name of recording: $filename"
-        //tvDuration.text = "Recording length is $duration"
+        tvDuration.text = "Recording length: $duration"
+        tvTimestamp.text = "The Date of recording is: $timeStamp"
 
         handler = Handler(Looper.getMainLooper())
         runnable = Runnable {
